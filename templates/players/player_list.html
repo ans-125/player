@@ -1,0 +1,113 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}قائمة اللاعبين - منصة إعلانات اللاعبين{% endblock %}
+
+{% block content %}
+    <section class="filters">
+        <h2>تصفية اللاعبين</h2>
+        <form method="get" action="{% url 'players:player_list' %}">
+            <div class="filter-group">
+                <label for="position">المركز:</label>
+                <select name="position" id="position">
+                    <option value="">الكل</option>
+                    <option value="حارس مرمى" {% if request.GET.position == 'حارس مرمى' %}selected{% endif %}>حارس مرمى</option>
+                    <option value="مدافع" {% if request.GET.position == 'مدافع' %}selected{% endif %}>مدافع</option>
+                    <option value="وسط" {% if request.GET.position == 'وسط' %}selected{% endif %}>وسط</option>
+                    <option value="مهاجم" {% if request.GET.position == 'مهاجم' %}selected{% endif %}>مهاجم</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="birth_year">سنة الميلاد:</label>
+                <select name="birth_year" id="birth_year">
+                    <option value="">الكل</option>
+                    {% for year in birth_years %}
+                        <option value="{{ year }}" {% if request.GET.birth_year == year|stringformat:"s" %}selected{% endif %}>{{ year }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="city">المدينة:</label>
+                <select name="city" id="city">
+                    <option value="">الكل</option>
+                    {% for city_choice in city_choices %}
+                        <option value="{{ city_choice.0 }}" {% if request.GET.city == city_choice.0 %}selected{% endif %}>{{ city_choice.1 }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="btn">تطبيق التصفية</button>
+            <a href="{% url 'players:player_list' %}" class="btn">إعادة تعيين</a>
+        </form>
+    </section>
+
+    <section class="player-list">
+        <h2>قائمة اللاعبين</h2>
+        
+        {% if user.is_authenticated %}
+            <a href="{% url 'players:add_player' %}" class="btn add-btn">إضافة لاعب جديد</a>
+        {% endif %}
+
+        {% if players %}
+            <div class="players-container">
+                {% for player in players %}
+                    <div class="player-card">
+                        <h3>{{ player.name }}</h3>
+                        <p><strong>المركز:</strong> {{ player.position }}</p>
+                        <p><strong>سنة الميلاد:</strong> {{ player.birth_year }}</p>
+                        <p><strong>المدينة:</strong> {{ player.city }}</p>
+                        <p><strong>الجنسية:</strong> {{ player.nationality }}</p>
+                        <p><strong>رقم الهاتف:</strong> {{ player.phone }}</p>
+                        
+                        {% if player.previous_clubs %}
+                            <p><strong>الأندية السابقة:</strong> {{ player.previous_clubs }}</p>
+                        {% endif %}
+                        
+                        {% if player.description %}
+                            <p><strong>الوصف:</strong> {{ player.description }}</p>
+                        {% endif %}
+                        
+                        {% if player.video %}
+                            <div class="player-video-container">
+                                <p><strong>مقطع فيديو:</strong></p>
+                                <video controls class="player-video">
+                                    <source src="{{ player.video.url }}" type="video/mp4">
+                                    متصفحك لا يدعم تشغيل الفيديو.
+                                </video>
+                            </div>
+                        {% endif %}
+                        
+                        <p class="player-date"><small>تاريخ النشر: {{ player.created_at|date:"d F Y - H:i" }}</small></p>
+                        
+                        {% if user.is_superuser and player.user != user %}
+                            <p class="admin-info"><small>صاحب الإعلان: {{ player.user.get_full_name }}</small></p>
+                        {% endif %}
+                        
+                        {% if user.is_authenticated and user == player.user or user.is_superuser %}
+                            <div class="player-controls">
+                                <a href="{% url 'players:edit_player' player.pk %}" class="btn edit-btn">تعديل</a>
+                                <a href="{% url 'players:delete_player' player.pk %}" class="btn delete-btn" onclick="return confirm('هل أنت متأكد من حذف هذا اللاعب؟')">حذف</a>
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="no-players-message">لا يوجد لاعبين متاحين.</div>
+        {% endif %}
+    </section>
+
+    <section class="contact-section">
+        <div class="contact-container">
+            <h2>تواصل معنا</h2>
+            <p class="contact-intro">يسعدنا تواصلك معنا في حال وجود:</p>
+            <ul class="contact-reasons">
+                <li><span class="contact-icon">💡</span> اقتراح لتحسين الموقع أو تجربة المستخدم</li>
+                <li><span class="contact-icon">🛠️</span> مشكلة تواجهك أثناء الاستخدام</li>
+                <li><span class="contact-icon">❓</span> استفسار بخصوص أي خدمة أو محتوى نقدمه</li>
+            </ul>
+            <p class="contact-methods">يمكنك التواصل معنا عبر البريد الإلكتروني التالي:</p>
+            <p class="contact-email"><span class="contact-icon">📧</span> البريد الإلكتروني: <a href="mailto:itplauer@gmail.com">itplauer@gmail.com</a></p>
+        </div>
+    </section>
+{% endblock %}
+

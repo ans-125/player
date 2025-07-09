@@ -1,0 +1,94 @@
+{% extends 'base/base.html' %}
+
+{% block title %}تعديل بيانات اللاعب - منصة إعلانات اللاعبين{% endblock %}
+
+{% block content %}
+    <div class="modal-content" style="max-width: 600px; margin: 50px auto; position: relative;">
+        <h2>تعديل بيانات اللاعب</h2>
+        
+        {% if form.errors %}
+            <div class="alert alert-error">
+                {% for field, errors in form.errors.items %}
+                    {% for error in errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                {% endfor %}
+            </div>
+        {% endif %}
+        
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="{{ form.name.id_for_label }}">الاسم:</label>
+                {{ form.name }}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.position.id_for_label }}">المركز:</label>
+                {{ form.position }}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.birth_year.id_for_label }}">سنة الميلاد:</label>
+                {{ form.birth_year }}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.city.id_for_label }}">المدينة:</label>
+                {{ form.city }}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.nationality.id_for_label }}">الجنسية:</label>
+                {{ form.nationality }}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.phone.id_for_label }}">رقم الهاتف:</label>
+                {{ form.phone }}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.previous_clubs.id_for_label }}">الأندية السابقة:</label>
+                {{ form.previous_clubs }}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.description.id_for_label }}">الوصف:</label>
+                {{ form.description }}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.video.id_for_label }}">مقطع فيديو للاعب (اختياري - بحد أقصى 120 ثانية):</label>
+                {% if player.video %}
+                    <p>الفيديو الحالي: <a href="{{ player.video.url }}" target="_blank">عرض الفيديو</a></p>
+                {% endif %}
+                {{ form.video }}
+                <small>يمكنك رفع مقطع فيديو يعرض مهارات اللاعب بحد أقصى 120 ثانية</small>
+            </div>
+            <button type="submit" class="btn submit-btn">حفظ التغييرات</button>
+            <a href="{% url 'players:player_list' %}" class="btn">إلغاء</a>
+        </form>
+    </div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.alert {
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 4px;
+}
+
+.alert-error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.alert-info {
+    background-color: #d1ecf1;
+    color: #0c5460;
+    border: 1px solid #bee5eb;
+}
+</style>
+{% endblock %}
+

@@ -1,0 +1,53 @@
+{% extends 'base/base.html' %}
+
+{% block title %}تأكيد حذف اللاعب - منصة إعلانات اللاعبين{% endblock %}
+
+{% block content %}
+    <div class="modal-content" style="max-width: 500px; margin: 50px auto; position: relative;">
+        <h2>تأكيد حذف اللاعب</h2>
+        
+        <div class="alert alert-warning">
+            <p>هل أنت متأكد من حذف اللاعب <strong>{{ player.name }}</strong>؟</p>
+            <p>هذا الإجراء لا يمكن التراجع عنه.</p>
+        </div>
+        
+        <div class="player-card" style="margin: 20px 0;">
+            <h3>{{ player.name }}</h3>
+            <p><strong>المركز:</strong> {{ player.position }}</p>
+            <p><strong>سنة الميلاد:</strong> {{ player.birth_year }}</p>
+            <p><strong>المدينة:</strong> {{ player.city }}</p>
+            <p><strong>رقم الهاتف:</strong> {{ player.phone }}</p>
+        </div>
+        
+        <form method="post">
+            {% csrf_token %}
+            <div class="button-group">
+                <button type="submit" class="btn delete-btn">نعم، احذف اللاعب</button>
+                <a href="{% url 'players:player_list' %}" class="btn">إلغاء</a>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.alert {
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 4px;
+}
+
+.alert-warning {
+    background-color: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeaa7;
+}
+
+.button-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+</style>
+{% endblock %}
+

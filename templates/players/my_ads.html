@@ -1,0 +1,68 @@
+{% extends 'base/base.html' %}
+
+{% block title %}إعلاناتي - منصة إعلانات اللاعبين{% endblock %}
+
+{% block content %}
+    <section class="player-list">
+        <h2>إعلاناتي</h2>
+        
+        <a href="{% url 'players:add_player' %}" class="btn add-btn">إضافة لاعب جديد</a>
+        
+        {% if not user.is_superuser %}
+            <div class="ads-limit-warning">
+                الإعلانات المتبقية: {{ remaining_ads }} من أصل 3
+            </div>
+        {% else %}
+            <div class="admin-info-banner">
+                أنت تتصفح بصلاحيات المدير - يمكنك التحكم في جميع الإعلانات ({{ total_players }} إعلان)
+            </div>
+        {% endif %}
+
+        {% if players %}
+            <div class="players-container">
+                {% for player in players %}
+                    <div class="player-card">
+                        <h3>{{ player.name }}</h3>
+                        <p><strong>المركز:</strong> {{ player.position }}</p>
+                        <p><strong>سنة الميلاد:</strong> {{ player.birth_year }}</p>
+                        <p><strong>المدينة:</strong> {{ player.city }}</p>
+                        <p><strong>الجنسية:</strong> {{ player.nationality }}</p>
+                        <p><strong>رقم الهاتف:</strong> {{ player.phone }}</p>
+                        
+                        {% if player.previous_clubs %}
+                            <p><strong>الأندية السابقة:</strong> {{ player.previous_clubs }}</p>
+                        {% endif %}
+                        
+                        {% if player.description %}
+                            <p><strong>الوصف:</strong> {{ player.description }}</p>
+                        {% endif %}
+                        
+                        {% if player.video %}
+                            <div class="player-video-container">
+                                <p><strong>مقطع فيديو:</strong></p>
+                                <video controls class="player-video">
+                                    <source src="{{ player.video.url }}" type="video/mp4">
+                                    متصفحك لا يدعم تشغيل الفيديو.
+                                </video>
+                            </div>
+                        {% endif %}
+                        
+                        <p class="player-date"><small>تاريخ النشر: {{ player.created_at|date:"d F Y - H:i" }}</small></p>
+                        
+                        {% if user.is_superuser and player.user != user %}
+                            <p class="admin-info"><small>صاحب الإعلان: {{ player.user.get_full_name }}</small></p>
+                        {% endif %}
+                        
+                        <div class="player-controls">
+                            <a href="{% url 'players:edit_player' player.pk %}" class="btn edit-btn">تعديل</a>
+                            <a href="{% url 'players:delete_player' player.pk %}" class="btn delete-btn" onclick="return confirm('هل أنت متأكد من حذف هذا اللاعب؟')">حذف</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="no-ads-message">ليس لديك إعلانات حالياً.</div>
+        {% endif %}
+    </section>
+{% endblock %}
+
