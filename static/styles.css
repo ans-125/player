@@ -190,6 +190,7 @@ header::before {
     transition: all 0.3s ease;
 }
 
+
 .player-card:hover .player-image {
     transform: scale(1.05);
     border-color: #ff1b6b;
@@ -887,10 +888,12 @@ header::before {
         font-size: 0.9rem;
     }
 
+   @media (max-width: 480px) {
     .player-image {
-        width: 50px;
-        height: 50px;
+        width: 40px;
+        height: 40px;
     }
+}
 
     .btn {
     font-size: 0.8rem;
