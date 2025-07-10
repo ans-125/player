@@ -9,7 +9,7 @@ class PlayerForm(forms.ModelForm):
     class Meta:
         model = Player
         fields = [
-            'name', 'position', 'birth_year', 'city', 'nationality', 
+            'name', 'image', 'position', 'birth_year', 'height', 'weight', 'city', 'nationality', 
             'phone', 'previous_clubs', 'description', 'video'
         ]
         widgets = {
@@ -19,9 +19,17 @@ class PlayerForm(forms.ModelForm):
             }),
             'position': forms.Select(attrs={'class': 'form-control'}),
             'birth_year': forms.Select(
-                choices=[(year, year) for year in range(2003, 2015)],
+                choices=[(year, year) for year in range(1995, 2015)],
                 attrs={'class': 'form-control'}
             ),
+            'height': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'أدخل الطول بالسنتيمتر'
+            }),
+            'weight': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'أدخل الوزن بالكيلوجرام'
+            }),
             'city': forms.Select(attrs={'class': 'form-control'}),
             'nationality': forms.Select(attrs={'class': 'form-control'}),
             'phone': forms.TextInput(attrs={
@@ -31,12 +39,16 @@ class PlayerForm(forms.ModelForm):
             'previous_clubs': forms.Textarea(attrs={
                 'class': 'form-control',
                 'rows': 2,
-                'placeholder': 'اكتب أسماء الأندية السابقة وعدد السنوات'
+                'placeholder': 'اكتب تفاصيل المسيرة الاحترافية للاعب'
             }),
             'description': forms.Textarea(attrs={
                 'class': 'form-control',
                 'rows': 4,
-                'placeholder': 'اكتب وصفاً للاعب'
+                'placeholder': 'اكتب مهارات اللاعب'
+            }),
+            'image': forms.FileInput(attrs={
+                'class': 'form-control',
+                'accept': 'image/*'
             }),
             'video': forms.FileInput(attrs={
                 'class': 'form-control',

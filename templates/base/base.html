@@ -5,23 +5,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}منصة إعلانات اللاعبين{% endblock %}</title>
+    <title>{% block title %}{% endblock %}</title>
+
     <link rel="stylesheet" href="{% static 'styles.css' %}">
     {% block extra_css %}{% endblock %}
 </head>
 
 <body>
     <header>
-        <h1>منصة إعلانات اللاعبين</h1>
+        <div class="logo-container">
+            <img src="{% static 'images/loig2.png' %}" alt="شعار" class="logo-image">
+        </div>
         <div class="auth-buttons">
-            <a href="{% url 'players:player_list' %}" class="btn home-btn">الصفحة الرئيسية</a>
             {% if user.is_authenticated %}
                 <div class="user-panel">
                     <span class="welcome-message">مرحباً بك {{ user.get_full_name }}</span>
+                    <a href="{% url 'players:player_list' %}" class="btn home-btn">الصفحة الرئيسية</a>
                     <a href="{% url 'players:my_ads' %}" class="btn my-ads-btn">إعلاناتي</a>
                     <a href="{% url 'authentication:logout' %}" class="btn logout-btn">تسجيل الخروج</a>
                 </div>
             {% else %}
+                <a href="{% url 'players:player_list' %}" class="btn home-btn">الصفحة الرئيسية</a>
                 <a href="{% url 'authentication:login' %}" class="btn login-btn">تسجيل الدخول</a>
                 <a href="{% url 'authentication:register' %}" class="btn register-btn">إنشاء حساب</a>
             {% endif %}

@@ -1,7 +1,7 @@
 {% extends 'base/base.html' %}
 {% load static %}
 
-{% block title %}قائمة اللاعبين - منصة إعلانات اللاعبين{% endblock %}
+{% block title %}قائمة اللاعبين{% endblock %}
 
 {% block content %}
     <section class="filters">
@@ -35,35 +35,52 @@
                     {% endfor %}
                 </select>
             </div>
-            <button type="submit" class="btn">تطبيق التصفية</button>
-            <a href="{% url 'players:player_list' %}" class="btn">إعادة تعيين</a>
+            <div class="filter-actions">
+                <button type="submit" class="btn">تطبيق التصفية</button>
+                <a href="{% url 'players:player_list' %}" class="btn reset-btn">إعادة تعيين</a>
+            </div>
         </form>
     </section>
 
     <section class="player-list">
-        <h2>قائمة اللاعبين</h2>
-        
-        {% if user.is_authenticated %}
-            <a href="{% url 'players:add_player' %}" class="btn add-btn">إضافة لاعب جديد</a>
-        {% endif %}
+        <div class="player-list-header">
+            <h2>قائمة اللاعبين</h2>
+            {% if user.is_authenticated %}
+                <a href="{% url 'players:add_player' %}" class="btn add-btn">إضافة لاعب جديد</a>
+            {% endif %}
+        </div>
 
         {% if players %}
             <div class="players-container">
                 {% for player in players %}
                     <div class="player-card">
-                        <h3>{{ player.name }}</h3>
+
+                        <div class="player-header">
+                            {% if player.image %}
+                            <div class="player-image">
+                                <img src="{{ player.image.url }}" alt="{{ player.name }}" />
+                            </div>
+                            {% endif %}
+                            <h3>{{ player.name }}</h3>
+                        </div>
                         <p><strong>المركز:</strong> {{ player.position }}</p>
                         <p><strong>سنة الميلاد:</strong> {{ player.birth_year }}</p>
+                        {% if player.height %}
+                        <p><strong>الطول:</strong> {{ player.height }} سم</p>
+                        {% endif %}
+                        {% if player.weight %}
+                        <p><strong>الوزن:</strong> {{ player.weight }} كجم</p>
+                        {% endif %}
                         <p><strong>المدينة:</strong> {{ player.city }}</p>
                         <p><strong>الجنسية:</strong> {{ player.nationality }}</p>
                         <p><strong>رقم الهاتف:</strong> {{ player.phone }}</p>
                         
                         {% if player.previous_clubs %}
-                            <p><strong>الأندية السابقة:</strong> {{ player.previous_clubs }}</p>
+                            <p><strong>المسيرة الاحترافية:</strong> {{ player.previous_clubs }}</p>
                         {% endif %}
                         
                         {% if player.description %}
-                            <p><strong>الوصف:</strong> {{ player.description }}</p>
+                            <p><strong>المهارات:</strong> {{ player.description }}</p>
                         {% endif %}
                         
                         {% if player.video %}
@@ -96,15 +113,16 @@
         {% endif %}
     </section>
 
+
     <section class="contact-section">
         <div class="contact-container">
             <h2>تواصل معنا</h2>
             <p class="contact-intro">يسعدنا تواصلك معنا في حال وجود:</p>
-            <ul class="contact-reasons">
-                <li><span class="contact-icon">💡</span> اقتراح لتحسين الموقع أو تجربة المستخدم</li>
-                <li><span class="contact-icon">🛠️</span> مشكلة تواجهك أثناء الاستخدام</li>
-                <li><span class="contact-icon">❓</span> استفسار بخصوص أي خدمة أو محتوى نقدمه</li>
-            </ul>
+            <div class="contact-text">
+                <p>💡 اقتراح لتحسين الموقع أو تجربة المستخدم</p>
+                <p>🛠️ مشكلة تواجهك أثناء الاستخدام</p>
+                <p>❓ استفسار بخصوص أي خدمة أو محتوى نقدمه</p>
+            </div>
             <p class="contact-methods">يمكنك التواصل معنا عبر البريد الإلكتروني التالي:</p>
             <p class="contact-email"><span class="contact-icon">📧</span> البريد الإلكتروني: <a href="mailto:itplauer@gmail.com">itplauer@gmail.com</a></p>
         </div>

@@ -61,14 +61,32 @@ class Player(models.Model):
         max_length=100,
         verbose_name="اسم اللاعب"
     )
+    image = models.ImageField(
+        upload_to='player_images/',
+        blank=True,
+        null=True,
+        verbose_name="صورة اللاعب"
+    )
     position = models.CharField(
         max_length=20,
         choices=POSITION_CHOICES,
         verbose_name="المركز"
     )
     birth_year = models.IntegerField(
-        validators=[MinValueValidator(2003), MaxValueValidator(2014)],
+        validators=[MinValueValidator(1995), MaxValueValidator(2014)],
         verbose_name="سنة الميلاد"
+    )
+    height = models.IntegerField(
+        validators=[MinValueValidator(100), MaxValueValidator(250)],
+        verbose_name="الطول (سم)",
+        null=True,
+        blank=True
+    )
+    weight = models.IntegerField(
+        validators=[MinValueValidator(30), MaxValueValidator(150)],
+        verbose_name="الوزن (كجم)",
+        null=True,
+        blank=True
     )
     city = models.CharField(
         max_length=50,
@@ -88,12 +106,12 @@ class Player(models.Model):
     # معلومات إضافية
     previous_clubs = models.TextField(
         blank=True,
-        verbose_name="الأندية السابقة",
-        help_text="اكتب أسماء الأندية السابقة وعدد السنوات"
+        verbose_name="المسيرة الاحترافية",
+        help_text="اكتب تفاصيل المسيرة الاحترافية للاعب"
     )
     description = models.TextField(
         blank=True,
-        verbose_name="الوصف"
+        verbose_name="المهارات"
     )
     
     # ملف الفيديو
@@ -101,8 +119,7 @@ class Player(models.Model):
         upload_to='player_videos/',
         blank=True,
         null=True,
-        verbose_name="مقطع فيديو",
-        help_text="مقطع فيديو يعرض مهارات اللاعب (بحد أقصى 120 ثانية)"
+        verbose_name="مقطع فيديو"
     )
     
     # معلومات النظام

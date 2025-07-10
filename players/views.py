@@ -32,7 +32,7 @@ def player_list(request):
     # إعداد البيانات للقالب
     context = {
         'players': players,
-        'birth_years': range(2003, 2015),
+        'birth_years': range(1995, 2015),
         'city_choices': Player.CITY_CHOICES,
     }
     

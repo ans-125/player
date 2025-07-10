@@ -1,6 +1,6 @@
 {% extends 'base/base.html' %}
 
-{% block title %}إضافة لاعب جديد - منصة إعلانات اللاعبين{% endblock %}
+{% block title %}إضافة لاعب جديد{% endblock %}
 
 {% block content %}
     <div class="modal-content" style="max-width: 600px; margin: 50px auto; position: relative;">
@@ -23,12 +23,24 @@
                 {{ form.name }}
             </div>
             <div class="form-group">
+                <label for="{{ form.image.id_for_label }}">صورة اللاعب:</label>
+                {{ form.image }}
+            </div>
+            <div class="form-group">
                 <label for="{{ form.position.id_for_label }}">المركز:</label>
                 {{ form.position }}
             </div>
             <div class="form-group">
                 <label for="{{ form.birth_year.id_for_label }}">سنة الميلاد:</label>
                 {{ form.birth_year }}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.height.id_for_label }}">الطول (سم):</label>
+                {{ form.height }}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.weight.id_for_label }}">الوزن (كجم):</label>
+                {{ form.weight }}
             </div>
             <div class="form-group">
                 <label for="{{ form.city.id_for_label }}">المدينة:</label>
@@ -43,17 +55,16 @@
                 {{ form.phone }}
             </div>
             <div class="form-group">
-                <label for="{{ form.previous_clubs.id_for_label }}">الأندية السابقة:</label>
+                <label for="{{ form.previous_clubs.id_for_label }}">المسيرة الاحترافية:</label>
                 {{ form.previous_clubs }}
             </div>
             <div class="form-group">
-                <label for="{{ form.description.id_for_label }}">الوصف:</label>
+                <label for="{{ form.description.id_for_label }}">المهارات:</label>
                 {{ form.description }}
             </div>
             <div class="form-group">
-                <label for="{{ form.video.id_for_label }}">مقطع فيديو للاعب (اختياري - بحد أقصى 120 ثانية):</label>
+                <label for="{{ form.video.id_for_label }}">مقطع فيديو للاعب:</label>
                 {{ form.video }}
-                <small>يمكنك رفع مقطع فيديو يعرض مهارات اللاعب بحد أقصى 120 ثانية</small>
             </div>
             <button type="submit" class="btn submit-btn">حفظ</button>
             <a href="{% url 'players:player_list' %}" class="btn">إلغاء</a>
