@@ -45,16 +45,23 @@
     <section class="player-list">
         <div class="player-list-header">
             <h2>قائمة اللاعبين</h2>
-            {% if user.is_authenticated %}
-                <a href="{% url 'players:add_player' %}" class="btn add-btn">إضافة لاعب جديد</a>
-            {% endif %}
+            <div class="view-options">
+                <button id="grid-view" class="view-btn active" title="عرض شبكي">
+                    <i class="fas fa-th"></i>
+                </button>
+                <button id="list-view" class="view-btn" title="عرض طولي">
+                    <i class="fas fa-list"></i>
+                </button>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'players:add_player' %}" class="btn add-btn">إضافة لاعب جديد</a>
+                {% endif %}
+            </div>
         </div>
 
         {% if players %}
-            <div class="players-container">
+            <div class="players-container grid-view">
                 {% for player in players %}
                     <div class="player-card">
-
                         <div class="player-header">
                             {% if player.image %}
                             <div class="player-image">
@@ -63,48 +70,50 @@
                             {% endif %}
                             <h3>{{ player.name }}</h3>
                         </div>
-                        <p><strong>المركز:</strong> {{ player.position }}</p>
-                        <p><strong>سنة الميلاد:</strong> {{ player.birth_year }}</p>
-                        {% if player.height %}
-                        <p><strong>الطول:</strong> {{ player.height }} سم</p>
-                        {% endif %}
-                        {% if player.weight %}
-                        <p><strong>الوزن:</strong> {{ player.weight }} كجم</p>
-                        {% endif %}
-                        <p><strong>المدينة:</strong> {{ player.city }}</p>
-                        <p><strong>الجنسية:</strong> {{ player.nationality }}</p>
-                        <p><strong>رقم الهاتف:</strong> {{ player.phone }}</p>
-                        
-                        {% if player.previous_clubs %}
-                            <p><strong>المسيرة الاحترافية:</strong> {{ player.previous_clubs }}</p>
-                        {% endif %}
-                        
-                        {% if player.description %}
-                            <p><strong>المهارات:</strong> {{ player.description }}</p>
-                        {% endif %}
-                        
-                        {% if player.video %}
-                            <div class="player-video-container">
-                                <p><strong>مقطع فيديو:</strong></p>
-                                <video controls class="player-video">
-                                    <source src="{{ player.video.url }}" type="video/mp4">
-                                    متصفحك لا يدعم تشغيل الفيديو.
-                                </video>
-                            </div>
-                        {% endif %}
-                        
-                        <p class="player-date"><small>تاريخ النشر: {{ player.created_at|date:"d F Y - H:i" }}</small></p>
-                        
-                        {% if user.is_superuser and player.user != user %}
-                            <p class="admin-info"><small>صاحب الإعلان: {{ player.user.get_full_name }}</small></p>
-                        {% endif %}
-                        
-                        {% if user.is_authenticated and user == player.user or user.is_superuser %}
-                            <div class="player-controls">
-                                <a href="{% url 'players:edit_player' player.pk %}" class="btn edit-btn">تعديل</a>
-                                <a href="{% url 'players:delete_player' player.pk %}" class="btn delete-btn" onclick="return confirm('هل أنت متأكد من حذف هذا اللاعب؟')">حذف</a>
-                            </div>
-                        {% endif %}
+                        <div class="player-details">
+                            <p><strong>المركز:</strong> {{ player.position }}</p>
+                            <p><strong>سنة الميلاد:</strong> {{ player.birth_year }}</p>
+                            {% if player.height %}
+                            <p><strong>الطول:</strong> {{ player.height }} سم</p>
+                            {% endif %}
+                            {% if player.weight %}
+                            <p><strong>الوزن:</strong> {{ player.weight }} كجم</p>
+                            {% endif %}
+                            <p><strong>المدينة:</strong> {{ player.city }}</p>
+                            <p><strong>الجنسية:</strong> {{ player.nationality }}</p>
+                            <p><strong>رقم الهاتف:</strong> {{ player.phone }}</p>
+                            
+                            {% if player.previous_clubs %}
+                                <p><strong>المسيرة الاحترافية:</strong> {{ player.previous_clubs }}</p>
+                            {% endif %}
+                            
+                            {% if player.description %}
+                                <p><strong>المهارات:</strong> {{ player.description }}</p>
+                            {% endif %}
+                            
+                            {% if player.video %}
+                                <div class="player-video-container">
+                                    <p><strong>مقطع فيديو:</strong></p>
+                                    <video controls class="player-video">
+                                        <source src="{{ player.video.url }}" type="video/mp4">
+                                        متصفحك لا يدعم تشغيل الفيديو.
+                                    </video>
+                                </div>
+                            {% endif %}
+                            
+                            <p class="player-date"><small>تاريخ النشر: {{ player.created_at|date:"d F Y - H:i" }}</small></p>
+                            
+                            {% if user.is_superuser and player.user != user %}
+                                <p class="admin-info"><small>صاحب الإعلان: {{ player.user.get_full_name }}</small></p>
+                            {% endif %}
+                            
+                            {% if user.is_authenticated and user == player.user or user.is_superuser %}
+                                <div class="player-controls">
+                                    <a href="{% url 'players:edit_player' player.pk %}" class="btn edit-btn">تعديل</a>
+                                    <a href="{% url 'players:delete_player' player.pk %}" class="btn delete-btn" onclick="return confirm('هل أنت متأكد من حذف هذا اللاعب؟')">حذف</a>
+                                </div>
+                            {% endif %}
+                        </div>
                     </div>
                 {% endfor %}
             </div>
@@ -112,7 +121,6 @@
             <div class="no-players-message">لا يوجد لاعبين متاحين.</div>
         {% endif %}
     </section>
-
 
     <section class="contact-section">
         <div class="contact-container">
@@ -127,5 +135,204 @@
             <p class="contact-email"><span class="contact-icon">📧</span> البريد الإلكتروني: <a href="mailto:itplauer@gmail.com">itplauer@gmail.com</a></p>
         </div>
     </section>
-{% endblock %}
 
+    <style>
+        /* أنماط أساسية */
+        .player-list-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .view-options {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .view-btn {
+            background: #f0f0f0;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .view-btn.active {
+            background: #007bff;
+            color: white;
+        }
+        
+        .view-btn:hover {
+            background: #ddd;
+        }
+        
+        .view-btn.active:hover {
+            background: #0069d9;
+        }
+        
+        .players-container {
+            transition: all 0.3s;
+        }
+        
+        /* نمط العرض الشبكي (جنب بعض) */
+        .players-container.grid-view {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        /* نمط العرض الطولي (تحت بعض) */
+        .players-container.list-view {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .players-container.list-view .player-card {
+            display: flex;
+            flex-direction: row;
+            max-width: 100%;
+        }
+        
+        .players-container.list-view .player-header {
+            flex: 0 0 200px;
+            margin-right: 20px;
+        }
+        
+        .players-container.list-view .player-details {
+            flex: 1;
+        }
+        
+        /* أنماط بطاقة اللاعب */
+        .player-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+        
+        .player-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .player-header {
+            padding: 15px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .player-image {
+            width: 100%;
+            height: 200px;
+            overflow: hidden;
+            margin-bottom: 10px;
+            border-radius: 4px;
+        }
+        
+        .player-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .player-details {
+            padding: 15px;
+        }
+        
+        .player-video-container {
+            margin-top: 10px;
+        }
+        
+        .player-video {
+            width: 100%;
+            max-height: 300px;
+            background: #000;
+        }
+        
+        .player-controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        /* تجاوبية للهواتف */
+        @media (max-width: 768px) {
+            .players-container.grid-view {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+            
+            .players-container.list-view .player-card {
+                flex-direction: column;
+            }
+            
+            .players-container.list-view .player-header {
+                flex: 0 0 auto;
+                margin-right: 0;
+            }
+            
+            .player-list-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .view-options {
+                width: 100%;
+                justify-content: space-between;
+                margin-top: 10px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .players-container.grid-view {
+                grid-template-columns: 1fr;
+            }
+            
+            .filter-group {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const gridViewBtn = document.getElementById('grid-view');
+            const listViewBtn = document.getElementById('list-view');
+            const playersContainer = document.querySelector('.players-container');
+            
+            // التحقق من التفضيل المحفوظ
+            const savedView = localStorage.getItem('playersView') || 'grid';
+            if (savedView === 'list') {
+                activateListView();
+            } else {
+                activateGridView();
+            }
+            
+            // أحداث النقر على الأزرار
+            gridViewBtn.addEventListener('click', activateGridView);
+            listViewBtn.addEventListener('click', activateListView);
+            
+            function activateGridView() {
+                playersContainer.classList.remove('list-view');
+                playersContainer.classList.add('grid-view');
+                gridViewBtn.classList.add('active');
+                listViewBtn.classList.remove('active');
+                localStorage.setItem('playersView', 'grid');
+            }
+            
+            function activateListView() {
+                playersContainer.classList.remove('grid-view');
+                playersContainer.classList.add('list-view');
+                listViewBtn.classList.add('active');
+                gridViewBtn.classList.remove('active');
+                localStorage.setItem('playersView', 'list');
+            }
+        });
+    </script>
+{% endblock %}

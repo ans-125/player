@@ -30,7 +30,7 @@ class CustomUserCreationForm(UserCreationForm):
     birth_year = forms.IntegerField(
         required=False,
         widget=forms.Select(
-            choices=[(year, year) for year in range(2003, 2015)],
+            choices=[(year, year) for year in range(1995, 2015)],
             attrs={'class': 'form-control'}
         ),
         label="سنة الميلاد"
